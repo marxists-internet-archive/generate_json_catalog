@@ -1,4 +1,5 @@
 ﻿<?
+
 //--------------------------------------------------------------
 // Функция рекурсивного сканирования каталога
 //--------------------------------------------------------------
@@ -8,6 +9,7 @@
 //--------------------------------------------------------------
 
 function scan_recursive($directory, $callback = null, $file) {
+
     // Привести каталог в канонизированный абсолютный путь
     $directory=realpath($directory);
  
@@ -32,7 +34,7 @@ function scan_recursive($directory, $callback = null, $file) {
 
 
 function scan_callback($fname, $file) {
-    $PATH = "http://pm-pu.ru/marx/"; //путь до каталога со скриптом
+    $PATH = "../";
     static $count = 0;
     
     $path_parts = pathinfo($fname);
@@ -49,7 +51,7 @@ function scan_callback($fname, $file) {
           $temp_arr['link'] = $PATH.$link;
           $json = json_encode($temp_arr, JSON_UNESCAPED_UNICODE);
           
-          //echo "$PATH$link<br>";
+          echo "$PATH$link<br>";
           if($count != 0){
             $json = ",".$json;
           }
@@ -63,8 +65,8 @@ function scan_callback($fname, $file) {
 }
 
 
-if (!$handle = $handle = fopen("index.json", "w")) {
-    echo "Не могу открыть файл (index.json)";
+if (!$handle = $handle = fopen("catalog.json", "w")) {
+    echo "Не могу открыть файл (catalog.json)";
     exit;
 }
 
