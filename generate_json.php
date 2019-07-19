@@ -39,31 +39,27 @@ function scan_callback($fname, $file) {
     
     $path_parts = pathinfo($fname);
     if (($path_parts['extension'] === "html") or($path_parts['extension'] === "htm")){
-      $content = file_get_contents($fname);
-      $pos_start = strpos($content, "<!-- metaJSON") + 13 > 13 ?  strpos($content, "<!-- metaJSON") + 13 : 0;
-      if ($pos_start > 0){
-        $pos_end = strpos($content, "metaJSON -->", $pos_start);
-          $json = trim(substr($content, $pos_start, $pos_end - $pos_start));
-          
-          $link = str_replace(dirname(__FILE__)."/", "", $fname);
-          
-          $temp_arr = json_decode($json, true);
-          $temp_arr['link'] = $PATH.$link;
-          $json = json_encode($temp_arr, JSON_UNESCAPED_UNICODE);
-          
-          echo "$PATH$link<br>";
-          if($count != 0){
-            $json = ",".$json;
-          }
-          fwrite($file, $json);
-          $count++;
-          echo 'Обработано! '.$fname.'<br/>';
-      } else {
-          echo 'Не обработано! '.$fname.'<br/>';
-      }
+        $content = file_get_contents($fname);
+        $pos_start = strpos($content, "<!-- metaJSON") + 13 > 13 ?  strpos($content, "<!-- metaJSON") + 13 : 0;
+        if ($pos_start > 0){
+            $pos_end = strpos($content, "metaJSON -->", $pos_start);
+            $json = trim(substr($content, $pos_start, $pos_end - $pos_start));
+            
+            $link = str_replace(dirname(__FILE__)."/", "", $fname);
+            
+            $temp_arr = json_decode($json, true);
+            $temp_arr['link'] = $PATH.$link;
+            $json = json_encode($temp_arr, JSON_UNESCAPED_UNICODE);
+            
+            if($count != 0) $json = ",".$json;
+            fwrite($file, $json);
+            $count++;
+            echo 'Обработано! '.$fname.'<br/>';
+        } else {
+            echo 'Не обработано! '.$fname.'<br/>';
+        }
     }
 }
-
 
 if (!$handle = $handle = fopen("catalog.json", "w")) {
     echo "Не могу открыть файл (catalog.json)";
